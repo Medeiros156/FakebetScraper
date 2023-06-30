@@ -147,3 +147,14 @@ schedule.every().day.at("04:01").do(run_scraper)
 while True:
     schedule.run_pending()
     time.sleep(1)
+
+
+
+def keep_alive():
+    # Send a GET request to a URL to keep the instance awake
+    response = requests.get("http://httpstat.us/200")
+    # Print the response status code for debugging
+    print(f"Keep-alive request status: {response.status_code}")
+
+# Schedule the keep-alive task to run every 5 minutes
+schedule.every(5).minutes.do(keep_alive)
