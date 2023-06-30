@@ -1,11 +1,35 @@
 import schedule
 import time
 import json
+from flask import Flask, jsonify
+
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from betfair import BetfairSpider
 from scores import ScoresSpider
 import mysql.connector
+
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return "Hello, this is your Flask application!"
+
+
+@app.route('/betfair_data', methods=['GET'])
+def get_betfair_data():
+    with open('betfair.json') as file:
+        data = json.load(file)
+    return jsonify(data)
+
+
+@app.route('/scores_data', methods=['GET'])
+def get_scores_data():
+    with open('scores.json') as file:
+        data = json.load(file)
+    return jsonify(data)
 
 # Set up the MySQL connection
 # cnx = mysql.connector.connect(
@@ -158,3 +182,13 @@ def keep_alive():
 
 # Schedule the keep-alive task to run every 5 minutes
 schedule.every(5).minutes.do(keep_alive)
+
+
+
+import threading
+
+scheduler_thread = threading.Thread(target=run_scheduler)
+scheduler_thread.start()
+
+if __name__ == '__main__':
+    app.run()
