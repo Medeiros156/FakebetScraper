@@ -140,7 +140,7 @@ def run_scraper():
     # Store scores data in MySQL
     update_games_scores(scores_data)
 
-schedule.every().day.at("4:01").do(run_scraper)
+schedule.every().day.at("04:01").do(run_scraper)
 # schedule.every(10).seconds.do(run_scraper)
 
 # Run the scheduler indefinitely
